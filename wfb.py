@@ -8,10 +8,16 @@ import random
 
 p = pyaudio.PyAudio()
 hwnd = win32gui.FindWindow(None, "World of Warcraft")
+input_device_index = 0
+
+for i in range(p.get_device_count()):
+	if p.get_device_info_by_index(i)["name"] == "Stereo Mix (Realtek(R) Audio)":
+		input_device_index = i
+		break
 
 while True:
 	start_time = time.time()
-	stream = p.open(format=pyaudio.paInt16, channels=1, rate=44100, input=True, input_device_index = 2)
+	stream = p.open(format=pyaudio.paInt16, channels=1, rate=44100, input=True, input_device_index = input_device_index)
 
 	while stream.is_active():
 		data = stream.read(1024, exception_on_overflow = False)
@@ -36,6 +42,3 @@ while True:
 
 	stream.stop_stream()
 	stream.close()
-
-
-# p.terminate()
