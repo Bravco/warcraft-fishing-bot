@@ -3,10 +3,12 @@ import numpy as np
 import time, random, pyaudio
 import win32gui, win32api, win32con
 
-def clickF6():
-    global hwnd
+def cast(isBait):
+    global hwnd, iterator
     win32api.PostMessage(hwnd, win32con.WM_KEYDOWN, win32con.VK_F6, 0)
     win32api.PostMessage(hwnd, win32con.WM_KEYUP, win32con.VK_F6, 0)
+    if isBait:
+        iterator = 0
 
 def toggle():
     global isRunning
@@ -23,15 +25,11 @@ def update():
             rms = np.sqrt(np.mean(data**2))
             db = round(20 * np.log10(rms / ((2**15) / 32768.0)))
             if db > -45:
-                clickF6()
+                cast(isBait=False)
                 time.sleep(random.uniform(2, 4))
-                clickF6()
-                iterator = 0
-                time.sleep(random.uniform(2, 4))
+                cast(isBait=True)
             elif iterator > 17:
-                clickF6()
-                iterator = 0
-                time.sleep(random.uniform(2, 4))
+                cast(isBait=True)
         
         decibelLabel.config(text=f"Decibel: {db} dB")
         iterator += .1
