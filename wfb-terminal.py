@@ -31,7 +31,7 @@ while True:
         rms = np.sqrt(np.mean(data**2))
         db = round(20 * np.log10(rms / ((2**15) / 32768.0)))
         print(f"dB: {db}")
-        if db > -0:
+        if db > -45:
             cast(isBait=False)
             break
         elif (time.time() - start_time) > 17:
