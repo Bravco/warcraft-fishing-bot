@@ -51,8 +51,9 @@ if __name__ == "__main__":
     input_device_index = 0
 
     for i in range(p.get_device_count()):
-        if p.get_device_info_by_index(i)["name"] == "Stereo Mix (Realtek(R) Audio)":
-            input_device_index = i
+        device = p.get_device_info_by_index(i)
+        if device["name"].__contains__("Stereo Mix"):
+            input_device_index = device["index"]
             break
 
     root = tk.Tk()
