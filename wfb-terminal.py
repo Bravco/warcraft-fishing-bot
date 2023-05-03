@@ -2,6 +2,12 @@ import numpy as np
 import time, random, pyaudio
 import win32gui, win32api, win32con
 
+def getInputDeviceIndex():
+    for i in range(p.get_device_count()):
+        device = p.get_device_info_by_index(i)
+        if device["name"].__contains__("Stereo Mix"):
+            return device["index"]
+
 def cast(isBait):
     global hwnd
     win32api.PostMessage(hwnd, win32con.WM_KEYDOWN, win32con.VK_F6, 0)
@@ -13,17 +19,10 @@ def cast(isBait):
 
 hwnd = win32gui.FindWindow(None, "World of Warcraft")
 p = pyaudio.PyAudio()
-input_device_index = 0
-
-for i in range(p.get_device_count()):
-    device = p.get_device_info_by_index(i)
-    if device["name"].__contains__("Stereo Mix"):
-        input_device_index = device["index"]
-        break
 
 while True:
     start_time = time.time()
-    stream = p.open(format=pyaudio.paInt16, channels=1, rate=44100, input=True, input_device_index = input_device_index)
+    stream = p.open(format=pyaudio.paInt16, channels=1, rate=44100, input=True, input_device_index = getInputDeviceIndex())
 
     while stream.is_active():
         data = stream.read(1024, exception_on_overflow = False)
