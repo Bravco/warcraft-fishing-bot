@@ -4,9 +4,11 @@ A simple fishing bot made it python. It uses the audio output of World of Warcra
 
 ## Getting Started
 
-1. You will need to have Stereo Mix input device in your computer enabled. If you don't see Stereo Mix in your input devices try to update drivers and make sure you have some sort of output device connected to your computer.
+1. You will need to have Stereo Mix input device in your computer enabled. If you don't see Stereo Mix in your input devices try to update drivers and make sure you have some sort of output device connected to your computer which the Stereo Mix is listening to.
 
 2. Make sure that the ouput device for World of Warcraft is the same output device which the Stereo Mix is listening to. You can check if you have the correct setup by looking at the dB value when sound in the game is played.
+
+3. You also need to install [Python](https://www.python.org/downloads/) onto your computer and after you installed Python you need to install all the required libraries to run the fishing bot script. Run ```pip install -r requirements.txt``` in the terminal.
 
 3. Install addon called [Better Fishing](https://www.curseforge.com/wow/addons/better-fishing).
 
