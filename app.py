@@ -17,6 +17,7 @@ if __name__ == "__main__":
     hwnd = win32gui.FindWindow(None, "World of Warcraft")
     p = pyaudio.PyAudio()
 
+    cast()
     while True:
         start_time = time.time()
         stream = p.open(format=pyaudio.paInt16, channels=1, rate=44100, input=True, input_device_index = getInputDeviceIndex())
@@ -33,7 +34,7 @@ if __name__ == "__main__":
             db = round(20 * np.log10(rms / ((2**15) / 32768.0)))
             print("dB:", db)
             if db > -45:
-                time.sleep(random.uniform(0.75, 1.75)) # Wait before catching the fish
+                time.sleep(random.uniform(0.75, 1.5)) # Wait before catching the fish
                 cast() # Catch
                 time.sleep(random.uniform(2, 4)) # Wait before casting a bait
                 break
