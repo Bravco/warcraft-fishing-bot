@@ -15,7 +15,7 @@ A simple fishing bot made it python. It uses the audio output of World of Warcra
 4. Make sure that the addon's keybind cast and interact is set to F6.
 
 5. Turn off every sound type except "Sound Effects". And set your sound volume to following:
-    - Master Volume 5%
+    - Master Volume 5% (5% is recommended at 100% system volume, but this can vary based on your system settings.)
     - Music 0%
     - Effects 100%
     - Ambience 0%

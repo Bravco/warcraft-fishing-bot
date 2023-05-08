@@ -2,6 +2,8 @@ import numpy as np
 import time, random, pyaudio
 import win32gui, win32api, win32con
 
+DECIBEL_THRESHOLD = -45
+
 def getInputDeviceIndex():
     p = pyaudio.PyAudio()
     for i in range(p.get_device_count()):
@@ -33,7 +35,7 @@ if __name__ == "__main__":
             rms = np.sqrt(np.mean(data**2))
             db = round(20 * np.log10(rms / ((2**15) / 32768.0)))
             print("dB:", db)
-            if db > -45:
+            if db > DECIBEL_THRESHOLD:
                 time.sleep(random.uniform(0.75, 1.5)) # Wait before catching the fish
                 cast() # Catch
                 time.sleep(random.uniform(2, 4)) # Wait before casting a bait
