@@ -11,15 +11,19 @@ def getInputDeviceIndex():
         if device["name"].__contains__("Stereo Mix"):
             return device["index"]
 
-def cast():
+def cast(isBait):
     win32api.PostMessage(hwnd, win32con.WM_KEYDOWN, win32con.VK_F6, 0)
     win32api.PostMessage(hwnd, win32con.WM_KEYUP, win32con.VK_F6, 0)
+    if isBait:
+        print("You threw the lure.")
+    else:
+        print("You catched a fish.")
 
 if __name__ == "__main__":
     hwnd = win32gui.FindWindow(None, "World of Warcraft")
     p = pyaudio.PyAudio()
 
-    cast()
+    cast(isBait=True)
     while True:
         start_time = time.time()
         stream = p.open(format=pyaudio.paInt16, channels=1, rate=44100, input=True, input_device_index = getInputDeviceIndex())
@@ -36,14 +40,14 @@ if __name__ == "__main__":
             db = round(20 * np.log10(rms / ((2**15) / 32768.0)))
             print("dB:", db)
             if db > DECIBEL_THRESHOLD:
-                time.sleep(random.uniform(0.75, 1.5)) # Wait before catching the fish
-                cast() # Catch
-                time.sleep(random.uniform(2, 4)) # Wait before casting a bait
+                time.sleep(random.uniform(.5, 1))
+                cast(isBait=False)
                 break
             elif (time.time() - start_time) > 17:
                 break
 
-        cast() # Bait
+        time.sleep(random.uniform(3, 5))
+        cast(isBait=True)
         start_time = time.time()
 
         stream.stop_stream()
