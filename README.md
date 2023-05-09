@@ -1,4 +1,4 @@
-![Logo](https://w7.pngwing.com/pngs/662/622/png-transparent-oneida-lake-internet-world-of-warcraft-business-pimax-net-fishing-logo-silhouette-black.png)
+![Image](https://static.icy-veins.com/images/wow/og-image-fishing.jpg)
 
 # World of Warcraft Fishing Bot
 
