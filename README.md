@@ -1,3 +1,5 @@
+![Logo](https://w7.pngwing.com/pngs/662/622/png-transparent-oneida-lake-internet-world-of-warcraft-business-pimax-net-fishing-logo-silhouette-black.png)
+
 # World of Warcraft Fishing Bot
 
 A simple fishing bot made it python. It uses the audio output of World of Warcraft to auto-fish. Only works for Windows.
