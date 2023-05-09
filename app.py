@@ -17,7 +17,7 @@ def cast(isBait):
     if isBait:
         print("You threw the lure.")
     else:
-        print("You catched a fish.")
+        print("You caught a fish.")
 
 if __name__ == "__main__":
     hwnd = win32gui.FindWindow(None, "World of Warcraft")
