@@ -1,8 +1,8 @@
-![Image](https://static.icy-veins.com/images/wow/og-image-fishing.jpg)
-
 # World of Warcraft Fishing Bot
 
-A simple fishing bot made it python. It uses the audio output of World of Warcraft to auto-fish. Only works for Windows.
+A World of Warcraft fishing bot programmed in Python. It uses the audio output of World of Warcraft window to auto-fish Only works on Windows.
+
+![Image](https://static.icy-veins.com/images/wow/og-image-fishing.jpg)
 
 ## Getting Started
 
