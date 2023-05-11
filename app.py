@@ -1,8 +1,17 @@
 import numpy as np
-import time, random, pyaudio
+import time, random, pyaudio, keyboard
 import win32gui, win32api, win32con
 
 DECIBEL_THRESHOLD = -45
+isRunning = True
+
+def toggleRunning():
+    global isRunning
+    isRunning = not isRunning
+    if isRunning:
+        print("Resumed")
+    else:
+        print("Paused")
 
 def getInputDeviceIndex():
     p = pyaudio.PyAudio()
@@ -23,34 +32,43 @@ if __name__ == "__main__":
     hwnd = win32gui.FindWindow(None, "World of Warcraft")
     p = pyaudio.PyAudio()
 
+    keyboard.on_press_key('space', lambda _: toggleRunning())
+
+    print("SPACE - stop/run")
+    input("Press <Enter> to continue to the app")
     cast(isBait=True)
     while True:
-        start_time = time.time()
-        stream = p.open(format=pyaudio.paInt16, channels=1, rate=44100, input=True, input_device_index = getInputDeviceIndex())
+        if isRunning:
+            start_time = time.time()
+            stream = p.open(format=pyaudio.paInt16, channels=1, rate=44100, input=True, input_device_index = getInputDeviceIndex())
 
-        while stream.is_active():
-            try:
-                data = stream.read(1024, exception_on_overflow = False)
-            except Exception as e:
-                print("Error reading audio stream:", e)
-                break
+            while stream.is_active():
+                if not isRunning:
+                    break
+                
+                try:
+                    data = stream.read(1024, exception_on_overflow = False)
+                except Exception as e:
+                    print("Error reading audio stream:", e)
+                    break
 
-            data = np.frombuffer(data, dtype=np.int16) / 32768.0
-            rms = np.sqrt(np.mean(data**2))
-            db = round(20 * np.log10(rms / ((2**15) / 32768.0)))
-            print("dB:", db)
-            if db > DECIBEL_THRESHOLD:
-                time.sleep(random.uniform(.5, 1))
-                cast(isBait=False)
-                break
-            elif (time.time() - start_time) > 17:
-                break
+                data = np.frombuffer(data, dtype=np.int16) / 32768.0
+                rms = np.sqrt(np.mean(data**2))
+                db = round(20 * np.log10(rms / ((2**15) / 32768.0)))
+                print("dB:", db)
+                if db > DECIBEL_THRESHOLD:
+                    time.sleep(random.uniform(.5, 1))
+                    cast(isBait=False)
+                    break
+                elif (time.time() - start_time) > 17:
+                    break
+                    
+            if isRunning:
+                time.sleep(random.uniform(3, 5))
+                cast(isBait=True)
+                start_time = time.time()
 
-        time.sleep(random.uniform(3, 5))
-        cast(isBait=True)
-        start_time = time.time()
-
-        stream.stop_stream()
-        stream.close()
+            stream.stop_stream()
+            stream.close()
 
     p.terminate()
