@@ -32,7 +32,7 @@ A World of Warcraft fishing bot programmed in Python. It uses the audio output o
 ## Supported Platforms
 
 | Platform | Status   |
-|----------|:--------:|
-| Windows  | &#10003; |
-| MacOS    | &#8722;  |
-| Linux    | &#8722;  |
+|:--------:|:--------:|
+| Windows  | :heavy_check_mark: - Supported |
+| MacOS    | :x: - Not supported  |
+| Linux    | :heavy_minus_sign: - Not tested |
