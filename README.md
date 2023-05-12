@@ -1,6 +1,6 @@
 # World of Warcraft Fishing Bot
 
-A World of Warcraft fishing bot programmed in Python. It uses the audio output of World of Warcraft window to auto-fish Only works on Windows.
+A World of Warcraft fishing bot programmed in Python. It uses the audio output of World of Warcraft window to automatically fish.
 
 ![Image](https://static.icy-veins.com/images/wow/og-image-fishing.jpg)
 
@@ -28,3 +28,11 @@ A World of Warcraft fishing bot programmed in Python. It uses the audio output o
 1. You need to install [Python](https://www.python.org/downloads/) onto your computer.
 
 2. After you have installed Python, you need to install all the required libraries to run the fishing bot script. Run ```pip install -r requirements.txt``` in the terminal.
+
+## Supported Platforms
+
+| Platform | Status   |
+|----------|----------|
+| Windows  | &#10003; |
+| macOS    | &#8722;  |
+| Linux    | &#8722;  |
