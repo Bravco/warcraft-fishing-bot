@@ -1,4 +1,4 @@
-# World of Warcraft Fishing Bot
+# World of Warcraft 1st Audio-based Fishing Bot
 
 A World of Warcraft fishing bot programmed in Python. It uses the audio output of World of Warcraft window to automatically fish.
 
