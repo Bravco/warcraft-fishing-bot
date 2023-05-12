@@ -34,5 +34,5 @@ A World of Warcraft fishing bot programmed in Python. It uses the audio output o
 | Platform | Status                     |
 |:--------:|:--------------------------:|
 | Windows  | :green_heart: Supported    |
-| MacOS    | :x: Not supported          |
+| MacOS    | :grey_question: Not tested |
 | Linux    | :grey_question: Not tested |
