@@ -2,10 +2,15 @@
 
 A World of Warcraft fishing bot programmed in Python. It uses the audio output of World of Warcraft window to automatically fish.
 
-## Disclaimer
-Using the World of Warcraft 1st Audio-based Fishing Bot may violate the World of Warcraft's terms of service and result in penalties, including getting banned. The creator of the World of Warcraft 1st Audio-based Fishing Bot is not liable for any consequences or damages caused by its use. Use at your own risk!
-
 ![Image](https://static.icy-veins.com/images/wow/og-image-fishing.jpg)
+
+## Supported Platforms
+
+| Platform | Status                     |
+|:--------:|:--------------------------:|
+| Windows  | :green_heart: Supported    |
+| MacOS    | :grey_question: Not tested |
+| Linux    | :grey_question: Not tested |
 
 ## Getting Started
 
@@ -32,10 +37,5 @@ Using the World of Warcraft 1st Audio-based Fishing Bot may violate the World of
 
 2. After you have installed Python, you need to install all the required libraries to run the fishing bot script. Run ```pip install -r requirements.txt``` in the terminal.
 
-## Supported Platforms
-
-| Platform | Status                     |
-|:--------:|:--------------------------:|
-| Windows  | :green_heart: Supported    |
-| MacOS    | :grey_question: Not tested |
-| Linux    | :grey_question: Not tested |
+## Disclaimer
+Using the World of Warcraft 1st Audio-based Fishing Bot may violate the World of Warcraft's terms of service and result in penalties, including getting banned. The creator of the World of Warcraft 1st Audio-based Fishing Bot is not liable for any consequences or damages caused by its use. Use at your own risk!
