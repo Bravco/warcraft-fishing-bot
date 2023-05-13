@@ -14,7 +14,7 @@ A World of Warcraft fishing bot programmed in Python. It uses the audio output o
 
 4. Make sure that the addon's keybind ```Cast and Interact``` is bind to F6.
 
-5. Turn off every sound type except "Sound Effects". And set your sound volume to following:
+5. Turn off every sound type except ```Sound Effects```. And set your sound volume to following:
     - Master Volume (5% is recommended at 100% system volume, but this can vary based on your system settings.)
     - Music 0%
     - Effects 100%
