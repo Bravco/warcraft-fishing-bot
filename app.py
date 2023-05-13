@@ -5,13 +5,16 @@ import win32gui, win32api, win32con
 DECIBEL_THRESHOLD = -45
 isRunning = True
 
-def toggleRunning():
-    global isRunning
-    isRunning = not isRunning
-    if isRunning:
-        print("Resumed")
-    else:
-        print("Paused")
+def toggleRunning(event):
+    activeWindow = win32gui.GetForegroundWindow()
+    className = win32gui.GetClassName(activeWindow)
+    if className == "ConsoleWindowClass":
+        global isRunning
+        isRunning = not isRunning
+        if isRunning:
+            print("Resumed")
+        else:
+            print("Paused")
 
 def getInputDeviceIndex():
     p = pyaudio.PyAudio()
@@ -32,7 +35,7 @@ if __name__ == "__main__":
     hwnd = win32gui.FindWindow(None, "World of Warcraft")
     p = pyaudio.PyAudio()
 
-    keyboard.on_press_key('space', lambda _: toggleRunning())
+    keyboard.on_press_key("space", toggleRunning)
 
     print("SPACE - stop/run")
     input("Press <Enter> to continue to the app")
