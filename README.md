@@ -29,7 +29,7 @@
     - Ambience 0%
     - Dialog 0%
 
-6. Go to a silent place and run the app.exe or app.py and let the bot do the work. It is recommended to not do anything else on the computer while the bot is fishing, because you can interfere with the sound output!
+6. Go to a silent place and run the ```app.exe``` or ```app.py``` and let the bot do the work. It is recommended to not do anything else on the computer while the bot is fishing, because you can interfere with the sound output!
 
 ### Python script
 
