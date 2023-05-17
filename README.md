@@ -4,7 +4,11 @@
 
 ![Image](https://static.icy-veins.com/images/wow/og-image-fishing.jpg)
 
-## Supported Platforms
+## Compatibility
+
+Works only on retail (World of Warcraft Dragonflight).
+
+### Supported Platforms
 
 | Platform | Status                     |
 |:--------:|:--------------------------:|
