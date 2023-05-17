@@ -8,7 +8,7 @@
 
 Works only on retail (World of Warcraft Dragonflight).
 
-### Supported Platforms
+#### Supported Platforms
 
 | Platform | Status                     |
 |:--------:|:--------------------------:|
@@ -35,7 +35,7 @@ Works only on retail (World of Warcraft Dragonflight).
 
 6. Go to a silent place and run the ```app.exe``` or ```app.py``` and let the bot do the work. It is recommended to not do anything else on the computer while the bot is fishing, because you can interfere with the sound output!
 
-### Python script
+#### Python script
 
 1. You need to install [Python](https://www.python.org/downloads/) onto your computer.
 
