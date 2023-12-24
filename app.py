@@ -1,6 +1,7 @@
 import numpy as np
 import time, random, pyaudio, keyboard
 import win32gui, win32api, win32con
+import threading
 
 DECIBEL_THRESHOLD = -45
 isRunning = True
@@ -31,26 +32,19 @@ def cast(isBait):
     else:
         print("You caught a fish.")
 
-if __name__ == "__main__":
-    hwnd = win32gui.FindWindow(None, "World of Warcraft")
-    p = pyaudio.PyAudio()
-
-    keyboard.on_press_key("space", toggleRunning)
-
-    print("SPACE - stop/run")
-    input("Press <Enter> to continue to the app")
-    cast(isBait=True)
+def audioProcessing():
+    global isRunning
     while True:
         if isRunning:
             start_time = time.time()
-            stream = p.open(format=pyaudio.paInt16, channels=1, rate=44100, input=True, input_device_index = getInputDeviceIndex())
+            stream = p.open(format=pyaudio.paInt16, channels=1, rate=44100, input=True, input_device_index=getInputDeviceIndex(), frames_per_buffer=2048)
 
             while stream.is_active():
                 if not isRunning:
                     break
                 
                 try:
-                    data = stream.read(1024, exception_on_overflow = False)
+                    data = stream.read(2048, exception_on_overflow=False)
                 except Exception as e:
                     print("Error reading audio stream:", e)
                     break
@@ -73,5 +67,24 @@ if __name__ == "__main__":
 
             stream.stop_stream()
             stream.close()
+
+if __name__ == "__main__":
+    hwnd = win32gui.FindWindow(None, "World of Warcraft")
+    p = pyaudio.PyAudio()
+
+    keyboard.on_press_key("space", toggleRunning)
+
+    print("SPACE - stop/run")
+    input("Press <Enter> to continue to the app")
+    cast(isBait=True)
+    
+    audioThread = threading.Thread(target=audioProcessing)
+    audioThread.start()
+
+    try:
+        audioThread.join()
+    except KeyboardInterrupt:
+        isRunning = False
+        audioThread.join()
 
     p.terminate()
