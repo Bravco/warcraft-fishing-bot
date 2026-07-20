@@ -1,0 +1,35 @@
+{
+  "audio_devices": "=== audio devices ===",
+  "default": "(default)",
+  "no_loopback": "[!] no loopback device found",
+  "using": "using:",
+  "pause_resume": "[space] pause / resume",
+  "to_start": "[enter] to start...",
+  "resumed": "resumed",
+  "paused": "paused",
+  "header_pause": "to pause",
+  "header_unpause": "to unpause",
+  "error": "error",
+  "lure_phrases": [
+    "lured 🎣",
+    "hooked 🎣",
+    "casting 🎣",
+    "line in water 🎣",
+    "bait dropped 🎣"
+  ],
+  "catch_phrases": [
+    "catched 🐟",
+    "fish on! 🐟",
+    "reeled in 🐟",
+    "got one! 🐟",
+    "yanked! 🐟"
+  ],
+  "header_dB": "dB:",
+  "header_stop": "to stop",
+  "or": "or",
+  "key_space": "Space",
+  "key_ctrl": "Ctrl",
+  "key_c": "C",
+  "bracket_open": "[",
+  "bracket_close": "]"
+}

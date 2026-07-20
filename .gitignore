@@ -1,0 +1,9 @@
+logs/
+*.log
+dist/
+build/
+*.spec
+__pycache__/
+*.pyc
+.venv/
+config.json

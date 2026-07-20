@@ -1,0 +1,35 @@
+{
+  "audio_devices": "=== peripheriques audio ===",
+  "default": "(par defaut)",
+  "no_loopback": "[!] aucun peripherique loopback trouve",
+  "using": "utilise :",
+  "pause_resume": "[space] pause / reprendre",
+  "to_start": "[entree] pour commencer...",
+  "resumed": "repris",
+  "paused": "en pause",
+  "header_pause": "mettre en pause",
+  "header_unpause": "reprendre",
+  "header_stop": "arreter",
+  "or": "ou",
+  "error": "erreur",
+  "lure_phrases": [
+    "lancer 🎣",
+    "hamecon a l eau 🎣",
+    "ligne lancee 🎣",
+    "appat pose 🎣",
+    "en attendant... 🎣"
+  ],
+  "catch_phrases": [
+    "attrape 🐟",
+    "poisson ! 🐟",
+    "ferre ! 🐟",
+    "tire ! 🐟",
+    "dans le filet ! 🐟"
+  ],
+  "header_dB": "dB:",
+  "key_space": "Espace",
+  "key_ctrl": "Ctrl",
+  "key_c": "C",
+  "bracket_open": "[",
+  "bracket_close": "]"
+}

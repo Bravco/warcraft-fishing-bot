@@ -1,0 +1,35 @@
+{
+  "audio_devices": "=== audio ustroistva ===",
+  "default": "(po umolchaniyu)",
+  "no_loopback": "[!] ne naideno loopback-ustroistvo",
+  "using": "ispolzuetsya:",
+  "pause_resume": "[space] pauza / prodolzhit",
+  "to_start": "[enter] dlya nachala...",
+  "resumed": "prodolzheno",
+  "paused": "priostanovleno",
+  "header_pause": "priostanovit",
+  "header_unpause": "prodolzhit",
+  "header_stop": "ostanovit",
+  "or": "ili",
+  "error": "oshibka",
+  "lure_phrases": [
+    "zabrosheno 🎣",
+    "krjuchok v vode 🎣",
+    "leska zabroshena 🎣",
+    "nazhivka na meste 🎣",
+    "ozhidanie... 🎣"
+  ],
+  "catch_phrases": [
+    "poiman 🐟",
+    "ryba! 🐟",
+    "podeseka! 🐟",
+    "vytyanuto! 🐟",
+    "v seti! 🐟"
+  ],
+  "header_dB": "dB:",
+  "key_space": "Пробел",
+  "key_ctrl": "Ctrl",
+  "key_c": "C",
+  "bracket_open": "[",
+  "bracket_close": "]"
+}
