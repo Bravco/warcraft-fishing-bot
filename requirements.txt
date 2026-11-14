@@ -1,4 +1,3 @@
-keyboard==0.13.5
-numpy==1.23.5
-PyAudio==0.2.12
-pywin32==305
+numpy==2.5.4
+PyAudio==0.2.14
+pywin32==311
