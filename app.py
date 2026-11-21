@@ -3,10 +3,10 @@ import random
 import threading
 import time
 import tkinter as tk
-from tkinter import messagebox
+from tkinter import messagebox, ttk
 
 import numpy as np
-import pyaudio
+import pyaudiowpatch as pyaudio
 import win32api
 import win32con
 import win32gui
@@ -14,7 +14,7 @@ import win32gui
 WINDOW_TITLE = "World of Warcraft"
 DEFAULT_THRESHOLD = -45
 CHUNK = 1024
-RATE = 44100
+DEFAULT_OUTPUT = "Windows default playback device"
 CAST_TIMEOUT = 30
 LISTEN_DELAY = 2
 MIN_RMS = 1e-10
@@ -34,20 +34,31 @@ FONT = "Segoe UI"
 MONO = "Consolas"
 
 
-def find_stereo_mix(p):
-    for i in range(p.get_device_count()):
-        if "Stereo Mix" in p.get_device_info_by_index(i)["name"]:
-            return i
-    return None
+def find_loopback(p, name):
+    """Resolve in the capture session; device indices can change on reconnect."""
+    if name == DEFAULT_OUTPUT:
+        device = p.get_default_wasapi_loopback()
+    else:
+        matches = [d for d in p.get_loopback_device_info_generator()
+                   if d["name"] == name]
+        if len(matches) != 1:
+            raise RuntimeError(
+                "Selected playback device is missing or ambiguous. "
+                "Refresh devices and select the output used by WoW."
+            )
+        device = matches[0]
+    if not device.get("isLoopbackDevice") or device["maxInputChannels"] < 1:
+        raise RuntimeError("No usable WASAPI loopback for this playback device.")
+    return device
 
 
 class Worker(threading.Thread):
-    def __init__(self, events, shared, hwnd, device_index, initial_cast):
+    def __init__(self, events, shared, hwnd, device_name, initial_cast):
         super().__init__(daemon=True)
         self.events = events
         self.shared = shared
         self.hwnd = hwnd
-        self.device_index = device_index
+        self.device_name = device_name
         self.initial_cast = initial_cast
         self.stop = threading.Event()
 
@@ -67,17 +78,26 @@ class Worker(threading.Thread):
         return cast
 
     def run(self):
-        p = pyaudio.PyAudio()
+        p = None
         stream = None
         try:
+            p = pyaudio.PyAudio()
+            device = find_loopback(p, self.device_name)
+            rate = int(device["defaultSampleRate"])
+            channels = int(device["maxInputChannels"])
+            stream = p.open(format=pyaudio.paInt16, channels=channels,
+                            rate=rate, input=True,
+                            input_device_index=device["index"],
+                            frames_per_buffer=CHUNK, start=False)
+            self.emit("audio", device["name"], rate, channels)
             cast = self.make_cast()
+            if self.stop.is_set():
+                return
             if self.initial_cast:
                 cast(True)
                 self.emit("settle")
-                self.stop.wait(LISTEN_DELAY)
-            stream = p.open(format=pyaudio.paInt16, channels=1, rate=RATE, input=True,
-                            input_device_index=self.device_index,
-                            frames_per_buffer=CHUNK, start=False)
+                if self.stop.wait(LISTEN_DELAY):
+                    return
 
             while not self.stop.is_set():
                 started = time.time()
@@ -88,8 +108,10 @@ class Worker(threading.Thread):
                     try:
                         raw = stream.read(CHUNK, exception_on_overflow=False)
                     except Exception as e:
-                        self.emit("error", str(e))
-                        break
+                        raise RuntimeError(
+                            "Audio capture failed. Check the playback device, "
+                            "then refresh and restart: " + str(e)
+                        ) from e
 
                     samples = np.frombuffer(raw, dtype=np.int16) / 32768.0
                     rms = max(np.sqrt(np.mean(samples ** 2)), MIN_RMS)
@@ -119,10 +141,15 @@ class Worker(threading.Thread):
         except Exception as e:
             self.emit("error", str(e))
         finally:
-            if stream is not None:
-                stream.close()
-            p.terminate()
-            self.emit("stopped")
+            try:
+                if stream is not None:
+                    stream.close()
+            finally:
+                try:
+                    if p is not None:
+                        p.terminate()
+                finally:
+                    self.emit("stopped")
 
 
 class App:
@@ -142,6 +169,7 @@ class App:
         self.counts = {"casts": 0}
 
         self.build()
+        self.refresh_devices()
         root.update_idletasks()
         width = max(560, root.winfo_reqwidth())
         height = max(720, root.winfo_reqheight())
@@ -167,6 +195,19 @@ class App:
         self.dot_id = self.dot.create_oval(1, 1, 9, 9, fill=MUTED, outline="")
         self.status = tk.Label(pill, text="", bg=PANEL, fg=TEXT, font=(FONT, 10))
         self.status.pack(side="left")
+
+        audio = tk.Frame(self.root, bg=PANEL)
+        audio.pack(fill="x", padx=pad, pady=8)
+        tk.Label(audio, text="Capture game audio from playback device",
+                 bg=PANEL, fg=TEXT, font=(FONT, 10)).pack(
+                     anchor="w", padx=16, pady=(12, 4))
+        self.audio_name = tk.StringVar(value=DEFAULT_OUTPUT)
+        self.audio_combo = ttk.Combobox(audio, textvariable=self.audio_name,
+                                        state="readonly", width=55)
+        self.audio_combo.pack(fill="x", padx=16, pady=4)
+        self.refresh_btn = tk.Button(audio, text="Refresh devices",
+                                      command=self.refresh_devices)
+        self.refresh_btn.pack(anchor="e", padx=16, pady=(4, 10))
 
         sound = tk.Frame(self.root, bg=PANEL)
         sound.pack(fill="x", padx=pad, pady=8)
@@ -252,6 +293,8 @@ class App:
         return b
 
     def set_buttons(self, running):
+        self.audio_combo.configure(state="disabled" if running else "readonly")
+        self.refresh_btn.configure(state="disabled" if running else "normal")
         self.start_btn.configure(state="disabled" if running else "normal",
                                  bg=PANEL if running else WATER,
                                  cursor="arrow" if running else "hand2")
@@ -307,6 +350,26 @@ class App:
         else:
             self.stop()
 
+    def refresh_devices(self):
+        if self.worker is not None:
+            return
+        p = None
+        names = [DEFAULT_OUTPUT]
+        try:
+            p = pyaudio.PyAudio()
+            names.extend(dict.fromkeys(
+                d["name"] for d in p.get_loopback_device_info_generator()
+                if d["maxInputChannels"] > 0))
+            self.log(f"Found {len(names) - 1} playback loopback devices.", "muted")
+        except Exception as exc:
+            self.log(f"Unable to list playback devices: {exc}", "red")
+        finally:
+            if p is not None:
+                p.terminate()
+        self.audio_combo.configure(values=names)
+        if self.audio_name.get() not in names:
+            self.audio_name.set(DEFAULT_OUTPUT)
+
     def start(self):
         if self.worker is not None:
             return
@@ -316,17 +379,8 @@ class App:
             messagebox.showerror("Game not found",
                                  f"Couldn't find a window titled '{WINDOW_TITLE}'.\nOpen the game and try again.")
             return
-        p = pyaudio.PyAudio()
-        device = find_stereo_mix(p)
-        p.terminate()
-        if device is None:
-            self.log("No 'Stereo Mix' input device found.", "red")
-            messagebox.showerror("Audio device not found",
-                                 "No 'Stereo Mix' input device found.\n"
-                                 "Enable it in Windows Sound settings > Recording, then try again.")
-            return
-        self.worker = Worker(self.events, self.shared, hwnd, device, self.first_start)
-        self.first_start = False
+        self.worker = Worker(self.events, self.shared, hwnd,
+                             self.audio_name.get(), self.first_start)
         self.run_started = time.time()
         self.worker.start()
         self.set_buttons(running=True)
@@ -357,6 +411,7 @@ class App:
         elif kind == "catch":
             self.log("You caught something", "green")
         elif kind == "bait":
+            self.first_start = False
             self.counts["casts"] += 1
             self.update_counts()
             self.log("You threw the lure", "water")
@@ -370,6 +425,8 @@ class App:
             self.cast_started = None
             self.set_status("Recasting soon", GOLD)
             self.hint.configure(text="Pausing before the next cast")
+        elif kind == "audio":
+            self.log(f"Capturing {event[1]} ({event[2]} Hz, {event[3]} channels)", "water")
         elif kind == "error":
             self.log(f"Error: {event[1]}", "red")
         elif kind == "stopped":
